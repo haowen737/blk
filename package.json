@@ -1,11 +1,15 @@
 {
-  "name": "blk",
+  "name": "blink",
   "version": "0.0.1",
   "description": "blk CLI",
-  "private": true,
+  "repository": "https://github.com/haowen737/blk",
   "bin": {
     "blk": "bin/blk"
   },
+  "engines": {
+    "node": ">=8.x"
+  },
+  "preferGlobal": true,
   "scripts": {
     "format": "prettier --write **/*.{js,json} && standard --fix",
     "lint": "standard",
@@ -20,6 +24,11 @@
     "bin",
     "src"
   ],
+  "author": {
+    "name": "haowen",
+    "email": "haowen737@gmail.com",
+    "url": "https://github.com/haowen737"
+  },
   "license": "MIT",
   "dependencies": {
     "gluegun": "next",
@@ -34,5 +43,9 @@
   },
   "standard": {
     "parser": "babel-eslint"
+  },
+  "devEngines": {
+    "node": ">=8.x",
+    "npm": ">=4.x"
   }
 }

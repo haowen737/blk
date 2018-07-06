@@ -2,11 +2,12 @@ const inquirer = require('inquirer')
 const fs = require('fs')
 
 const COMMAND_BASE = { name: 'generate', alias: ['g'] }
+const BASE_PATH = process.cwd()
 const BASE_WARNING = 'Blk will generate bilorplate file at current path'
 const questions = [{
   type: 'confirm',
   name: 'confirm',
-  message: `Generate at ---> ${process.cwd()}`,
+  message: `Generate at ---> ${BASE_PATH}`,
 }, {
   type: 'list',
   choices: [ "hawk", "xxx", "ccc" ],
@@ -28,6 +29,10 @@ const copyJobs = [{
   template: 'hawk/list.js.ejs', target: 'list.js'
 }, {
   template: 'hawk/components/tableConfig.js.ejs', target: '/components/tableConfig.js'
+}, {
+  template: 'hawk/redux/index.js.ejs', target: '/redux/index.js'
+}, {
+  template: 'hawk/redux/list.js.ejs', target: '/redux/list.js'
 }]
 
 module.exports = Object.assign(COMMAND_BASE, { run: async (context) => {
@@ -43,7 +48,7 @@ module.exports = Object.assign(COMMAND_BASE, { run: async (context) => {
       copyJobs.forEach(async c => {
         await generate({
           template: c.template,
-          target: `process/${c.target}`,
+          target: `${BASE_PATH}/${projectName}/${c.target}`,
           props: { projectName, project }
         })
       })

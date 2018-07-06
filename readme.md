@@ -4,7 +4,7 @@ A CLI for blk.
 
 ## usage
 
-```npm i blink-blink -g```
+```npm i blink-blink-blink -g```
 
 ```cd {your path}```
 

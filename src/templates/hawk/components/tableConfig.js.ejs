@@ -1,0 +1,98 @@
+import React from 'react'
+
+import TableOption from 'components/tableOption'
+
+const __data = global.__data
+const searchSetting = {}
+const tableRender = {}
+
+const {
+  // HAWKEYE_EXPRESSACCOUNT_CONFIRM,
+} = __data.authCode
+
+/* ------------- Search ------------- */
+// 渠道
+searchSetting.platform = {
+  defaultValue: '',
+  items: () => __data.allExpressList
+}
+
+// 城市选择
+searchSetting.cityDropDown = function (ctx) {
+  return {
+    type: 'cityDropdown',
+    items: () => __data.ownedCityList.map(c => (
+      { value: c.cityId.toString(), mean: c.cityName, pinyin: c.pinyin }
+    ))
+  }
+}
+
+const searchFields = function (funcList) {
+  return [
+    {
+      title: '渠道', key: 'platformId', type: 'select', ...searchSetting.platform
+    }, {
+      title: '城市', key: 'cityId', ...searchSetting.cityDropDown(this)
+    }
+  ]
+}
+
+/* ------------- Table ------------- */
+tableRender.options = function (funcList, value, row, index) {
+  const { accountStatus } = row
+  const options = [
+    {
+      title: '编辑',
+      actionType: 'edit',
+      style: { color: 'green' },
+      hidden: () => false
+    }
+  ]
+  const tableAction = (opt, rows) => {
+    const action = funcList[opt.actionType]
+    action && action(rows)
+  }
+  return {
+    children: <TableOption row={{ value, row, index }} options={options} onClickOption={tableAction} />
+  }
+}
+
+const tableHeaders = function (funcList) {
+  return [
+    {
+      title: '渠道', dataIndex: 'platformId', key: 'platformId', render: tableRender.platformId
+    }, {
+      title: '城市', dataIndex: 'cityId', key: 'cityId', render: tableRender.cityId
+    }, {
+      title: '操作', key: 'option', fixed: 'right', width: 200, render: tableRender.options.bind(this, funcList)
+    }
+  ]
+}
+
+const buttonRowFields = function ({
+  onClickImport,
+  onClickExport,
+  onClickMultiRetreat,
+  selectedRows
+}) {
+  return [{
+    title: '导入',
+    onClick: onClickImport,
+    hidden: !HAWKEYE_EXPRESSACCOUNT_IMPORT
+  }, {
+    title: '导出',
+    onClick: onClickExport,
+    hidden: !HAWKEYE_EXPRESSACCOUNT_EXPORT
+  }, {
+    title: '批量退回',
+    disabled: selectedRows.length === 0,
+    onClick: onClickMultiRetreat,
+    hidden: !HAWKEYE_EXPRESSACCOUNT_RETREAT_MULTI
+  }]
+}
+
+export default {
+  tableHeaders,
+  searchFields,
+  buttonRowFields,
+}

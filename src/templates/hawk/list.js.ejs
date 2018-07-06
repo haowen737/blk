@@ -1,0 +1,76 @@
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { routerActions } from 'react-router-redux'
+
+import Panel from 'components/panel'
+import Table from 'components/table'
+import SearchBar from 'components/searchbar'
+
+import {
+  fetch<%= props.projectName %>
+} from './redux/list'
+
+@connect(
+  state => ({
+    <%= props.projectName %>List: state.<%= props.projectName %>State.list.data,
+  }),
+  dispatch => ({
+    actions: bindActionCreators(routerActions, dispatch),
+    dispatch: dispatch
+  })
+)
+export default class <%= props.project %>List extends Component {
+  constructor() {
+    super()
+    this.state = {
+    }
+  }
+
+  onSearch = () => {}
+
+  /**
+   * 搜索项
+   */
+  searchFields = tableConfig.searchFields()
+
+  /**
+   * 列表表格配置
+   */
+  tableHeaders = tableConfig.tableHeaders.call(this, {
+    edit: this.edit
+  })
+
+  /**
+   * 操作按钮
+   */
+  buttonRowFields = tableConfig.buttonRowFields(this, {
+    onClickImport: this.onClickImport
+    onClickExport: this.onClickExport
+    onClickMultiRetreat: this.onClickMultiRetreat
+  })
+
+  render() {
+    const { <%= props.projectName %>List } = this.props
+    return (
+      <Panel>
+        <SearchBar
+          onSubmit={this.onSearch}
+          fields={this.searchFields}
+          ref={(r) => { this.search = r }}
+        />
+        <ButtonRow
+          fields={this.buttonRowFields}
+        />
+        <Table
+          onChange={page => this.onTableChange(page)}
+          header={this.tableHeaders}
+          pageSize={<%= props.projectName %>List.pageSize}
+          total={<%= props.projectName %>List.totalCount}
+          currentPage={<%= props.projectName %>List.currentPage}
+          data={<%= props.projectName %>List.list}
+        />
+      </Panel>
+    )
+  }
+}

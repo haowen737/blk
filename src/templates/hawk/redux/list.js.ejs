@@ -13,7 +13,7 @@ export const fetch<%= props.project %>List = createFetchAction({
 })
 
 // 对账单信息
-export const fetch<%= props.project %> = createFetchAction({
+export const fetch<%= props.project %>Info = createFetchAction({
   name: '<%= props.projectName %>Info',
   api: <%= props.project %>Api.<%= props.projectName %>Info
 })
@@ -22,7 +22,7 @@ export const fetch<%= props.project %> = createFetchAction({
 export const defaultState = {
   data: {
     list: [],
-    pageSize: 50,
+    pageSize: 20,
     currentPage: 1,
     totalCount: 0,
   }

@@ -38,6 +38,13 @@ const searchFields = function (funcList) {
 }
 
 /* ------------- Table ------------- */
+// city render
+tableRender.cityId = function (value, row = {}) {
+  const city = __data.cityList.find(c => c.cityId === value)
+  return city ? city.cityName : ''
+}
+
+// option render
 tableRender.options = function (funcList, value, row, index) {
   const { accountStatus } = row
   const options = [
@@ -73,21 +80,21 @@ const buttonRowFields = function ({
   onClickImport,
   onClickExport,
   onClickMultiRetreat,
-  selectedRows
+  selectedRows = []
 }) {
   return [{
     title: '导入',
     onClick: onClickImport,
-    hidden: !HAWKEYE_EXPRESSACCOUNT_IMPORT
+    hidden: false
   }, {
     title: '导出',
     onClick: onClickExport,
-    hidden: !HAWKEYE_EXPRESSACCOUNT_EXPORT
+    hidden: false
   }, {
     title: '批量退回',
     disabled: selectedRows.length === 0,
     onClick: onClickMultiRetreat,
-    hidden: !HAWKEYE_EXPRESSACCOUNT_RETREAT_MULTI
+    hidden: false
   }]
 }
 

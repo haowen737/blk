@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import css from 'react-css-modules'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { routerActions } from 'react-router-redux'
@@ -6,11 +7,17 @@ import { routerActions } from 'react-router-redux'
 import Panel from 'components/panel'
 import Table from 'components/table'
 import SearchBar from 'components/searchbar'
+import ButtonRow from 'components/buttonRow'
+
+import tableConfig from './components/tableConfig'
 
 import {
-  fetch<%= props.projectName %>
+  fetch<%= props.project %>List,
+  fetch<%= props.project %>Info
 } from './redux/list'
+import styles from './index.scss'
 
+@css(styles)
 @connect(
   state => ({
     <%= props.projectName %>List: state.<%= props.projectName %>State.list.data,
@@ -45,8 +52,8 @@ export default class <%= props.project %>List extends Component {
    * 操作按钮
    */
   buttonRowFields = tableConfig.buttonRowFields(this, {
-    onClickImport: this.onClickImport
-    onClickExport: this.onClickExport
+    onClickImport: this.onClickImport,
+    onClickExport: this.onClickExport,
     onClickMultiRetreat: this.onClickMultiRetreat
   })
 

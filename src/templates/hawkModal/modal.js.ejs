@@ -1,0 +1,36 @@
+import React, { Component } from 'react'
+import { Modal, Upload, Button, Icon, message } from 'antd'
+import css from 'react-css-modules'
+
+import styles from '../index.scss'
+
+@css(styles)
+export default class <%= props.project %>Modal extends Component {
+
+  handleCancel = () => {
+    this.props.onCancel()
+  }
+
+  handleOk = () => {
+    this.props.onOk()
+  }
+
+  render() {
+    const { visible } = this.props
+
+    return (
+      <div>
+        <Modal
+          width={800}
+          title="<%= props.project %>Modal Title"
+          visible={visible}
+          destroyOnClose
+          onCancel={this.handleCancel}
+          onOk={this.handleOk}
+        >
+          
+        </Modal>
+      </div>
+    )
+  }
+}

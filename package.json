@@ -1,6 +1,6 @@
 {
   "name": "blink-blink-blink",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "blk CLI",
   "repository": "https://github.com/haowen737/blk",
   "bin": {

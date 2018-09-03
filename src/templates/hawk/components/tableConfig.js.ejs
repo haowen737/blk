@@ -2,9 +2,12 @@ import React from 'react'
 
 import TableOption from 'components/tableOption'
 
+import styles from '../index.scss'
+
 const __data = global.__data
 const searchSetting = {}
-const tableRender = {}
+const tableRender = {}// table单元格render
+const tableOnCell = {}// table单元格属性
 
 const {
   // HAWKEYE_EXPRESSACCOUNT_CONFIRM,
@@ -44,6 +47,21 @@ tableRender.cityId = function (value, row = {}) {
   return city ? city.cityName : ''
 }
 
+// platform render
+tableRender.platformId = function (value) {
+  const platform = __data.platform.find(e => e.value === value)
+  // const platform = __data.allExpressList.find(e => e.value === value)
+  return platform ? platform.mean : ''
+}
+
+// you may need an onCell
+tableOnCell.someCell = function (handleClickSomeCell, record) {
+  return {
+    onClick: () => { handleClickSomeCell(record)},
+    className: styles['some-custom-cell']
+  }
+}
+
 // option render
 tableRender.options = function (funcList, value, row, index) {
   const { accountStatus } = row
@@ -65,11 +83,14 @@ tableRender.options = function (funcList, value, row, index) {
 }
 
 const tableHeaders = function (funcList) {
+  const { handleClickSomeCell } = funcList
   return [
     {
       title: '渠道', dataIndex: 'platformId', key: 'platformId', render: tableRender.platformId
     }, {
       title: '城市', dataIndex: 'cityId', key: 'cityId', render: tableRender.cityId
+    }, {
+      title: '客制cell', dataIndex: 'c', key: 'c', onCell: tableOnCell.someCell.bind(this, handleClickSomeCell)
     }, {
       title: '操作', key: 'option', fixed: 'right', width: 200, render: tableRender.options.bind(this, funcList)
     }

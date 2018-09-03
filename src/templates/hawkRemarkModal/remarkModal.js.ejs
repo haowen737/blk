@@ -1,0 +1,55 @@
+import React, { Component } from 'react'
+import { Modal, Input } from 'antd'
+
+export default class RemarkModal extends Component {
+  constructor() {
+    super()
+    this.state = {
+      value: '',
+      visible: false
+    }
+  }
+
+  handleOk = () => {
+    const { value } = this.state
+    this.setState({ visible: false, value: '' }, () => {
+      this.resolve(value)
+      // this.setState({ value: '' })
+    })
+  }
+
+  handleCancel = () => {
+    this.setState({ visible: false, value: '' }, () => {
+      this.reject()
+      this.resolve = null
+    })
+  }
+
+  onChangeTextArea = (e) => {
+    this.setState({ value: e.target.value })
+  }
+
+  show = () => new Promise((resolve, reject) => {
+    this.setState({ visible: true })
+    this.resolve = resolve
+    this.reject = reject
+  })
+
+  render() {
+    const { value, visible } = this.state
+    return (
+      <Modal
+        title="备注"
+        visible={visible}
+        onOk={this.handleOk}
+        onCancel={this.handleCancel}
+      >
+        <Input.TextArea
+          value={value}
+          placeholder="请输入备注"
+          onChange={this.onChangeTextArea}
+        />
+      </Modal>
+    )
+  }
+}

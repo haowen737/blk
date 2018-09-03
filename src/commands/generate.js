@@ -10,9 +10,9 @@ const questions = [{
   message: `Generate at ---> ${BASE_PATH}`,
 }, {
   type: 'list',
-  choices: [ "hawk", "xxx", "ccc" ],
+  choices: [ "hawk", "hawkModal", "hawkRemarkModal" ],
   name: 'projectType',
-  message: 'Your Generate Type',
+  message: 'Choose a template and kick it off',
   when: ({ confirm }) => confirm
   
 }, {
@@ -20,20 +20,28 @@ const questions = [{
   name: 'projectName',
   message: 'Your Route Name',
   default: () => 'untitled',
-  when: ({ confirm }) => confirm
+  when: ({ confirm, projectType }) => confirm && projectType === 'hawk'
 }]
 
-const copyJobs = [{
-  template: 'hawk/index.js.ejs', target: 'index.js'
-}, {
-  template: 'hawk/list.js.ejs', target: 'list.js'
-}, {
-  template: 'hawk/components/tableConfig.js.ejs', target: '/components/tableConfig.js'
-}, {
-  template: 'hawk/redux/index.js.ejs', target: '/redux/index.js'
-}, {
-  template: 'hawk/redux/list.js.ejs', target: '/redux/list.js'
-}]
+const copyJobs = {
+  hawk: [{
+    template: 'hawk/index.js.ejs', target: 'index.js'
+  }, {
+    template: 'hawk/list.js.ejs', target: 'list.js'
+  }, {
+    template: 'hawk/components/tableConfig.js.ejs', target: '/components/tableConfig.js'
+  }, {
+    template: 'hawk/redux/index.js.ejs', target: '/redux/index.js'
+  }, {
+    template: 'hawk/redux/list.js.ejs', target: '/redux/list.js'
+  }],
+  hawkModal: [{
+    template: 'hawkModal/modal.js.ejs', target: 'modal.js'
+  }],
+  hawkRemarkModal: [{
+    template: 'hawkRemarkModal/remarkModal.js.ejs', target: 'remarkModal.js'
+  }]
+}
 
 module.exports = Object.assign(COMMAND_BASE, { run: async (context) => {
   inquirer
@@ -44,11 +52,16 @@ module.exports = Object.assign(COMMAND_BASE, { run: async (context) => {
 
       const { parameters, template: { generate } } = context
 
-      const project = projectName.charAt(0).toUpperCase()+projectName.slice(1);
-      copyJobs.forEach(async c => {
+      const project = projectName && projectName.charAt(0).toUpperCase()+projectName.slice(1);
+
+      const copyJob = copyJobs[projectType]
+      copyJob.forEach(async c => {
+        const target = projectType === 'hawk'
+          ? `${BASE_PATH}/${projectName}/${c.target}`
+          : c.target
         await generate({
           template: c.template,
-          target: `${BASE_PATH}/${projectName}/${c.target}`,
+          target,
           props: { projectName, project }
         })
       })

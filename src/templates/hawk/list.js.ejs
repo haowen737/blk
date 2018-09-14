@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
-import css from 'react-css-modules'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import { routerActions } from 'react-router-redux'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import css from 'react-css-modules'
+import moment from 'moment'
+import * as _ from 'lodash'
 
 import Panel from 'components/panel'
 import Table from 'components/table'
@@ -34,24 +36,58 @@ export default class <%= props.project %>List extends Component {
     }
   }
 
-  onSearch = () => {}
+  /** ------------------- 列表搜索 ----------------------*/
+
+  onSearch = (searchFields) => {
+    this.loadList()
+  }
+
+  onTableChange = (currentPage) => {
+    this.loadList(currentPage)
+  }
+
+  loadList = (currentPage = 1) => {
+    const { <%= props.projectName %>List } = this.props
+    // eslint-disable-next-line
+    const fields = _(this.search.state.fields).omitBy(_.isNull).omitBy(_.isUndefined).omitBy(value => value === '').value()
+
+    const beginTime = fields.beginTime
+      ? moment(fields.beginTime).utcOffset(8).startOf('day').valueOf()
+      : ''
+    const endTime = fields.endTime
+      ? moment(fields.endTime).utcOffset(8).endOf('day').valueOf()
+      : ''
+    
+    const query = Object.assign({}, fields, {
+      currentPage: currentPage || <%= props.projectName %>List.currentPage,
+      pageSize: <%= props.projectName %>List.pageSize,
+      beginTime,
+      endTime,
+    })
+
+    this.props.dispatch(
+      fetch<%= props.project %>List(query)
+    )
+  }
 
   /**
    * 搜索项
    */
-  searchFields = tableConfig.searchFields()
+  searchFields = () => tableConfig.searchFields()
+
+  /** ------------------- 表格操作 ----------------------*/
 
   /**
    * 列表表格配置
    */
-  tableHeaders = tableConfig.tableHeaders.call(this, {
+  tableHeaders = () => tableConfig.tableHeaders.call(this, {
     edit: this.edit
   })
 
   /**
    * 操作按钮
    */
-  buttonRowFields = tableConfig.buttonRowFields(this, {
+  buttonRowFields = () => tableConfig.buttonRowFields(this, {
     onClickImport: this.onClickImport,
     onClickExport: this.onClickExport,
     onClickMultiRetreat: this.onClickMultiRetreat
@@ -63,15 +99,15 @@ export default class <%= props.project %>List extends Component {
       <Panel>
         <SearchBar
           onSubmit={this.onSearch}
-          fields={this.searchFields}
+          fields={this.searchFields()}
           ref={(r) => { this.search = r }}
         />
         <ButtonRow
-          fields={this.buttonRowFields}
+          fields={this.buttonRowFields()}
         />
         <Table
           onChange={page => this.onTableChange(page)}
-          header={this.tableHeaders}
+          header={this.tableHeaders()}
           pageSize={<%= props.projectName %>List.pageSize}
           total={<%= props.projectName %>List.totalCount}
           currentPage={<%= props.projectName %>List.currentPage}

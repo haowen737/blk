@@ -27,6 +27,8 @@ const copyJobs = {
   hawk: [{
     template: 'hawk/index.js.ejs', target: 'index.js'
   }, {
+    template: 'hawk/index.scss.ejs', target: 'index.scss'
+  }, {
     template: 'hawk/list.js.ejs', target: 'list.js'
   }, {
     template: 'hawk/components/tableConfig.js.ejs', target: '/components/tableConfig.js'

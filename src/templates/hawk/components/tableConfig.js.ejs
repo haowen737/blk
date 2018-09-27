@@ -33,7 +33,7 @@ searchSetting.cityDropDown = function (ctx) {
 const searchFields = function (funcList) {
   return [
     {
-      title: '渠道', key: 'platformId', type: 'select', ...searchSetting.platform
+      title: '渠道', key: 'platformId', type: 'platformDropdown', ...searchSetting.platform
     }, {
       title: '城市', key: 'cityId', ...searchSetting.cityDropDown(this)
     }

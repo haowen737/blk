@@ -1,0 +1,42 @@
+import React, { Component } from 'react'
+import { Modal, Upload, Button, Form, message } from 'antd'
+import { connect } from 'react-redux'
+import css from 'react-css-modules'
+
+import styles from '../index.scss'
+
+@connect(
+  state => ({}),
+  dispatch => ({ dispatch: dispatch })
+)
+@Form.create()
+@css(styles)
+export default class <%= props.project %>Modal extends Component {
+
+  handleCancel = () => {
+    this.props.onCancel()
+  }
+
+  handleOk = () => {
+    this.props.onOk()
+  }
+
+  render() {
+    const { visible } = this.props
+
+    return (
+      <div>
+        <Modal
+          width={800}
+          title="<%= props.project %>Modal Title"
+          visible={visible}
+          destroyOnClose
+          onCancel={this.handleCancel}
+          onOk={this.handleOk}
+        >
+          
+        </Modal>
+      </div>
+    )
+  }
+}

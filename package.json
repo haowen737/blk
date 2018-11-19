@@ -31,7 +31,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "gluegun": "next",
+    "gluegun": "^2.0.0-beta.12",
     "inquirer": "^6.0.0"
   },
   "devDependencies": {
